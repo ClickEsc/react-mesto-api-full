@@ -20,9 +20,9 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 // Роутинг
-app.use('/', auth, cardsRouter);
 app.use('/', usersRouter);
 app.use('/', errorRouter);
+app.use('/', auth, cardsRouter);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
