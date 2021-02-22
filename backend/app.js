@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { auth } = require('../middlewares/auth.js');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
 const errorRouter = require('./routes/error.js');
@@ -18,17 +19,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-// Мидлвэр для авторизации
-app.use((req, res, next) => {
-  req.user = {
-    _id: '60196aadeb5e4531602bd96d',
-  };
-
-  next();
-});
-
 // Роутинг
-app.use('/', cardsRouter);
+app.use('/', auth, cardsRouter);
 app.use('/', usersRouter);
 app.use('/', errorRouter);
 
