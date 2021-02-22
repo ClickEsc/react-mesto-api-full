@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-  getUsers, getUserById, login, createUser, updateProfileInfo, updateAvatar,
+  getUsers, getUserById, getCurrentUser, login, createUser, updateProfileInfo, updateAvatar,
 } = require('../controllers/users');
 const { auth } = require('../middlewares/auth.js');
 
@@ -9,6 +9,9 @@ router.get('/users', auth, getUsers);
 
 // Запрос информации о пользователе по id
 router.get('/users/:userId', auth, getUserById);
+
+// Запрос информации о текущем пользователе
+router.get('/users/me', auth, getCurrentUser);
 
 // Запрос на вход пользователя
 router.post('/signin', login);

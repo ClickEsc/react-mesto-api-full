@@ -30,6 +30,27 @@ module.exports.getUserById = (req, res) => {
     });
 };
 
+// Запрос информации о текущем пользователе
+module.exports.getCurrentUser = (req, res) => {
+  const userId = req.user._id;
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        res.status(404).json({ message: 'Нет пользователя с таким id' });
+      } else {
+        res.status(200).send({ data: user });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+      } else {
+        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+      }
+    });
+};
+
 // Запрос на создание пользователя
 module.exports.createUser = (req, res) => {
   const {
