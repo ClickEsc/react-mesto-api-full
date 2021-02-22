@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { auth } = require('./middlewares/auth.js');
+const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
 const errorRouter = require('./routes/error.js');
@@ -20,9 +21,12 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 // Роутинг
-app.use('/', usersRouter);
-app.use('/', errorRouter);
+app.post('/signin', login);
+app.post('/signup', createUser);
+
 app.use('/', auth, cardsRouter);
+app.use('/', auth, usersRouter);
+app.use('/', errorRouter);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

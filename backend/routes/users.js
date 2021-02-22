@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-  getUsers, getUserById, getCurrentUser, login, createUser, updateProfileInfo, updateAvatar,
+  getUsers, getUserById, getCurrentUser, updateProfileInfo, updateAvatar,
 } = require('../controllers/users');
 const { auth } = require('../middlewares/auth.js');
 
@@ -12,12 +12,6 @@ router.get('/users/:userId', auth, getUserById);
 
 // Запрос информации о текущем пользователе
 router.get('/users/me', auth, getCurrentUser);
-
-// Запрос на вход пользователя
-router.post('/signin', login);
-
-// Запрос на регистрацию пользователя
-router.post('/signup', createUser);
 
 // Запрос на обновление информации в профиле
 router.patch('/users/me', auth, updateProfileInfo);
