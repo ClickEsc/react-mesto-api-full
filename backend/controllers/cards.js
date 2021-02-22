@@ -28,6 +28,8 @@ module.exports.deleteCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).json({ message: 'Нет карточки с таким id' });
+      } else if (req.user_id !== card.owner._id) {
+        res.status(403).json({ message: 'Вы не можете удалять карточки других пользователей' });
       } else {
         res.status(200).send({ data: card });
       }
