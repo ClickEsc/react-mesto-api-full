@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { auth } = require('../middlewares/auth.js');
+const { auth } = require('./middlewares/auth.js');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
 const errorRouter = require('./routes/error.js');
