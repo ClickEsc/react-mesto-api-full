@@ -9,7 +9,7 @@ node_modules
 .pnp.js
 
 # Production
-/build
+build
 
 # Optional npm cache directory
 .npm
