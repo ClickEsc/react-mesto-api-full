@@ -2,11 +2,17 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+const NotFoundError = require('../errors/not-found-err');
+const BadRequestError = require('../errors/bad-request-err');
+const UnauthorizedError = require('../errors/unauthorized-err');
+
 // Запрос списка пользователей
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
-    .catch((err) => res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` }));
+    .catch(() => {
+      next();
+    });
 };
 
 // Запрос информации о пользователе по id
@@ -16,14 +22,14 @@ module.exports.getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
+        throw new NotFoundError('Нет пользователя с таким id');
       } else {
         res.status(200).send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+        throw new BadRequestError('Нет пользователя с таким id');
       } else {
         res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
       }
@@ -31,28 +37,28 @@ module.exports.getUserById = (req, res) => {
 };
 
 // Запрос информации о текущем пользователе
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
 
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
+        throw new NotFoundError('Нет пользователя с таким id');
       } else {
         res.status(200).send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+        throw new BadRequestError('Нет пользователя с таким id');
       } else {
-        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+        next();
       }
     });
 };
 
 // Запрос на создание пользователя
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     email, password, name, about, avatar,
   } = req.body;
@@ -68,9 +74,9 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
+        throw new BadRequestError('Переданы некорректные данные');
       } else {
-        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+        next();
       }
     });
 };
@@ -84,13 +90,13 @@ module.exports.login = (req, res) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch((err) => {
-      res.status(401).json({ message: err.message });
+    .catch(() => {
+      throw new UnauthorizedError('Требуется авторизация');
     });
 };
 
 // Запрос на обновление информации в профиле
-module.exports.updateProfileInfo = (req, res) => {
+module.exports.updateProfileInfo = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
@@ -102,24 +108,24 @@ module.exports.updateProfileInfo = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
+        throw new NotFoundError('Нет пользователя с таким id');
       } else {
         res.status(200).send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+        throw new BadRequestError('Нет пользователя с таким id');
       } else if (err.name === 'ValidationError') {
-        res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
+        throw new BadRequestError('Переданы некорректные данные');
       } else {
-        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+        next();
       }
     });
 };
 
 // Запрос на обновление аватара пользователя
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
@@ -132,18 +138,18 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
+        throw new NotFoundError('Нет пользователя с таким id');
       } else {
         res.status(200).send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+        throw new BadRequestError('Нет пользователя с таким id');
       } else if (err.name === 'ValidationError') {
-        res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
+        throw new BadRequestError('Переданы некорректные данные');
       } else {
-        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+        next();
       }
     });
 };
