@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 const { auth } = require('./middlewares/auth.js');
 const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
@@ -28,12 +30,30 @@ app.get('/crash-test', () => {
 });
 
 // Роутинг
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    // eslint-disable-next-line no-useless-escape
+    avatar: Joi.string().pattern(/https?:\/\/w{0,3}[a-z0-9-._~:\/?#[\]@!$&'()*+,;=]{0,}/i),
+  }),
+}), createUser);
 
 app.use('/', auth, cardsRouter);
 app.use('/', auth, usersRouter);
 app.use('/', errorRouter);
+
+// Обработчики ошибок
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
@@ -43,6 +63,7 @@ app.use((err, req, res, next) => {
   next();
 });
 
+// Сообщение о запуске сервера
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
