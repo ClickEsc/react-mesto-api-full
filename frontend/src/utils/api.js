@@ -89,9 +89,8 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-17',
+  baseUrl: 'https://clickesc.students.nomoreparties.space',
   headers: {
-    authorization: '6e218dd6-3398-4e8b-ab7c-72e842f1ee4b',
     "Content-Type": "application/json"
   }
 })

@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.clickesc.students.nomoreparties.space';
 
 // Обработка запроса регистрации пользователя
 export const register = (email, password) => {
