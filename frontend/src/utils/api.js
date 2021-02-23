@@ -89,7 +89,7 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: 'https://clickesc.students.nomoreparties.space',
+  baseUrl: 'https://skubilina.students.nomoreparties.space',
   headers: {
     "Content-Type": "application/json"
   }

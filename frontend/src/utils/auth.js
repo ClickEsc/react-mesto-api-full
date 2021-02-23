@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.clickesc.students.nomoreparties.space';
+export const BASE_URL = 'https://api.skubilina.students.nomoreparties.space';
 
 // Обработка запроса регистрации пользователя
 export const register = (email, password) => {
