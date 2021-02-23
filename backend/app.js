@@ -23,6 +23,26 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+// CORS
+const allowedCors = [
+  'https://api.skubilina.students.nomoreparties.space',
+  'https://www.api.skubilina.students.nomoreparties.space',
+  'http://api.skubilina.students.nomoreparties.space',
+  'http://www.api.skubilina.students.nomoreparties.space',
+  'https://skubilina.students.nomoreparties.space',
+  'https://www.skubilina.students.nomoreparties.space',
+  'http://skubilina.students.nomoreparties.space',
+  'http://www.skubilina.students.nomoreparties.space',
+];
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
+
 // Краш-тест
 app.get('/crash-test', () => {
   setTimeout(() => {
