@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { auth } = require('./middlewares/auth.js');
 const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
@@ -29,6 +30,9 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+// Логгирование запросов
+app.use(requestLogger);
+
 // Роутинг
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -51,6 +55,9 @@ app.post('/signup', celebrate({
 app.use('/', auth, cardsRouter);
 app.use('/', auth, usersRouter);
 app.use('/', errorRouter);
+
+// Логгирование ошибок
+app.use(errorLogger);
 
 // Обработчики ошибок
 app.use(errors());
