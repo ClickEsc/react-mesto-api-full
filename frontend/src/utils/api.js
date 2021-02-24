@@ -89,7 +89,7 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: 'https://skubilina.students.nomoreparties.space',
+  baseUrl: 'https://api.skubilina.students.nomoreparties.space',
   headers: {
     "Content-Type": "application/json"
   }
