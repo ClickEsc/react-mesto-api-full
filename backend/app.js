@@ -68,14 +68,14 @@ app.use(requestLogger);
 app.use('/', auth, cardsRouter);
 app.use('/', auth, usersRouter);
 
-app.post('/signin', celebrate({
+app.post('/signin', /*celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
   }),
-}), login);
+}),*/ login);
 
-app.post('/signup', celebrate({
+app.post('/signup', /*celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
@@ -84,7 +84,7 @@ app.post('/signup', celebrate({
     // eslint-disable-next-line no-useless-escape
     avatar: Joi.string().pattern(/https?:\/\/w{0,3}[a-z0-9-._~:\/?#[\]@!$&'()*+,;=]{0,}/i),
   }),
-}), createUser);
+}),*/ createUser);
 
 app.use('/', errorRouter);
 
