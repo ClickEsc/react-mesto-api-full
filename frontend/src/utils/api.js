@@ -91,7 +91,6 @@ class Api {
 export const api = new Api({
   baseUrl: 'https://api.skubilina.students.nomoreparties.space',
   headers: {
-    authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "application/json"
   }
 })
