@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -60,7 +61,7 @@ app.use(requestLogger);
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required(),
+    password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
   }),
 }), login);
 
