@@ -11,9 +11,9 @@
 + Происходит логирование запросов и ошибок
 
 Ссылка:  
-http://clickesc.students.nomoreparties.space
+http://skubilina.students.nomoreparties.space
 
 Ссылка по защищенному соединению:
-https://clickesc.students.nomoreparties.space
+https://skubilina.students.nomoreparties.space
 
-Публичный IP-адрес: 84.201.132.193
+Публичный IP-адрес: 84.252.128.206
