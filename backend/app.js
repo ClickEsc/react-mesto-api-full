@@ -78,9 +78,10 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use('/', auth, cardsRouter);
-app.use('/', auth, usersRouter);
+app.use(auth);
 
+app.use('/', cardsRouter);
+app.use('/', usersRouter);
 app.use('/', errorRouter);
 
 // Логгирование ошибок
