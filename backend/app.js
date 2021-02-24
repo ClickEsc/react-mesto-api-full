@@ -34,6 +34,13 @@ const allowedCors = [
   'http://www.skubilina.students.nomoreparties.space/',
 ];
 
+const corsOptions = {
+  origin: allowedCors,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 app.use((req, res, next) => {
   const { origin } = req.headers;
   if (allowedCors.includes(origin)) {
@@ -41,13 +48,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-const corsOptions = {
-  origin: allowedCors,
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
