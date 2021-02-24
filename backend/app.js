@@ -28,12 +28,7 @@ const allowedCors = [
   'http://www.skubilina.students.nomoreparties.space',
 ];
 
-const corsOptions = {
-  origin: allowedCors,
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
