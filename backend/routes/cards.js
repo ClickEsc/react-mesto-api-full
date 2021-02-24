@@ -1,15 +1,14 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { auth } = require('../middlewares/auth.js');
 const {
   getCards, createCard, deleteCard, likeCard, dislikeCard,
 } = require('../controllers/cards');
 
 // Запрос списка карточек
-router.get('/cards', auth, getCards);
+router.get('/cards', getCards);
 
 // Запрос на создание карточки
-router.post('/cards', auth, celebrate({
+router.post('/cards', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     // eslint-disable-next-line no-useless-escape
@@ -18,12 +17,12 @@ router.post('/cards', auth, celebrate({
 }), createCard);
 
 // Запрос на удаление карточки
-router.delete('/cards/:cardId', auth, deleteCard);
+router.delete('/cards/:cardId', deleteCard);
 
 // Запрос на добавление лайка карточке
-router.put('/cards/:cardId/likes', auth, likeCard);
+router.put('/cards/:cardId/likes', likeCard);
 
 // Запрос на удаление лайка с карточки
-router.delete('/cards/:cardId/likes', auth, dislikeCard);
+router.delete('/cards/:cardId/likes', dislikeCard);
 
 module.exports = router;

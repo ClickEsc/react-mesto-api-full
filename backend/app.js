@@ -65,6 +65,9 @@ app.get('/crash-test', () => {
 app.use(requestLogger);
 
 // Роутинг
+app.use('/', auth, cardsRouter);
+app.use('/', auth, usersRouter);
+
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -83,8 +86,6 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use('/', auth, cardsRouter);
-app.use('/', auth, usersRouter);
 app.use('/', errorRouter);
 
 // Логгирование ошибок
