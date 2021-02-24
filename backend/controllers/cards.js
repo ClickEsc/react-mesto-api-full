@@ -8,9 +8,7 @@ const ForbiddenError = require('../errors/forbidden-err');
 module.exports.getCards = (req, res, next) => {
   Card.find({}).populate('owner')
     .then((cards) => res.status(200).send({ data: cards }))
-    .catch(() => {
-      next();
-    });
+    .catch(next);
 };
 
 // Запрос на создание карточки
@@ -23,7 +21,7 @@ module.exports.createCard = (req, res, next) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы некорректные данные');
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -44,7 +42,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new BadRequestError('Нет карточки с таким id');
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -66,7 +64,7 @@ module.exports.likeCard = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new BadRequestError('Нет карточки с таким id');
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -88,7 +86,7 @@ module.exports.dislikeCard = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new BadRequestError('Нет карточки с таким id');
       } else {
-        next();
+        next(err);
       }
     });
 };

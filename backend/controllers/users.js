@@ -13,9 +13,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
-    .catch(() => {
-      next();
-    });
+    .catch(next);
 };
 
 // Запрос информации о пользователе по id
@@ -55,7 +53,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new BadRequestError('Нет пользователя с таким id');
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -79,7 +77,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы некорректные данные');
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -122,7 +120,7 @@ module.exports.updateProfileInfo = (req, res, next) => {
       } else if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы некорректные данные');
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -152,7 +150,7 @@ module.exports.updateAvatar = (req, res, next) => {
       } else if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы некорректные данные');
       } else {
-        next();
+        next(err);
       }
     });
 };
