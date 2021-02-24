@@ -12,7 +12,7 @@ export const register = (email, password) => {
   })
     .then((res) => {
       try {
-        if (res.status === 201) {
+        if (res.ok) {
           return res.json();
         }
       } catch (err) {
