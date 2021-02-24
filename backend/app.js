@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -42,6 +43,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(cors());
 
 // Краш-тест
 app.get('/crash-test', () => {
