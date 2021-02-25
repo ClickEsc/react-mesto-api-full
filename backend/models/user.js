@@ -26,21 +26,21 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Введите URL.',
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      validate: {
-        validator: (v) => isEmail(v),
-        message: 'Неправильный формат почты.',
-      },
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: (v) => isEmail(v),
+      message: 'Неправильный формат почты.',
     },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-      select: false,
-    },
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    select: false,
   },
 });
 

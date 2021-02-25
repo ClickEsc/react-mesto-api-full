@@ -74,12 +74,12 @@ app.post('/signin', celebrate({
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     // eslint-disable-next-line no-useless-escape
     avatar: Joi.string().pattern(/https?:\/\/w{0,3}[a-z0-9-._~:\/?#[\]@!$&'()*+,;=]{0,}/i),
+    email: Joi.string().required().email(),
+    password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
   }),
 }), createUser);
 
