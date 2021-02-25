@@ -61,7 +61,7 @@ module.exports.getCurrentUser = (req, res, next) => {
 // Запрос на создание пользователя
 module.exports.createUser = (req, res, next) => {
   const {
-    email, password, name, about, avatar,
+    name, about, avatar, email, password,
   } = req.body;
 
   bcrypt.hash(password, 10)
@@ -72,7 +72,12 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      email: user.email,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы некорректные данные');
