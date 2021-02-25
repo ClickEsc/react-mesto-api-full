@@ -1,10 +1,9 @@
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const BadRequestError = require('../errors/bad-request-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.auth = (req, res, next) => {
+module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
@@ -13,7 +12,6 @@ module.exports.auth = (req, res, next) => {
 
   const token = authorization.replace('Bearer ', '');
   let payload;
-  console.log(payload);
 
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
