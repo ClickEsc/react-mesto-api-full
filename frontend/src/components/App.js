@@ -37,9 +37,12 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
 
+  console.log(isLoggedIn);
+
   function handleLogIn() {
     const token = localStorage.getItem('token');
     if (token) {
+      console.log(isLoggedIn);
       auth.getToken(token)
         .then((res) => {
           if (res) {
@@ -103,9 +106,9 @@ function App() {
   }
 
   // Cохранение токена для повторного входа пользователя без дополнительной авторизации
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     handleLogIn();
-  }, [isLoggedIn]);
+  }, [isLoggedIn]);*/
 
   // Удаление токена при выходе пользователя
   function signOut() {

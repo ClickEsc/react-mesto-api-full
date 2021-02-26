@@ -4,7 +4,6 @@ const User = require('../models/user');
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
-const UnauthorizedError = require('../errors/unauthorized-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -38,7 +37,7 @@ module.exports.getUserById = (req, res) => {
 
 // Запрос информации о текущем пользователе
 module.exports.getCurrentUser = (req, res, next) => {
-  const { userId } = req.user._id;
+  const userId = req.user._id;
 
   User.findById(userId)
     .then((user) => {
@@ -87,7 +86,7 @@ module.exports.createUser = (req, res, next) => {
 };
 
 // Контроллер аутентификации
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -95,9 +94,7 @@ module.exports.login = (req, res) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch(() => {
-      throw new UnauthorizedError('Требуется авторизация');
-    });
+    .catch(next);
 };
 
 // Запрос на обновление информации в профиле
