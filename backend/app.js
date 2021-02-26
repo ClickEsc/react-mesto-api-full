@@ -4,9 +4,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { errors } = require('celebrate');
-const { celebrate, Joi } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth.js');
+const signinInfoValidator = require('./middlewares/validators/signin');
+const signupInfoValidator = require('./middlewares/validators/signup');
 const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
@@ -78,23 +79,9 @@ app.get('/crash-test', () => {
 app.use(requestLogger);
 
 // Роутинг
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
-  }),
-}), login);
+app.post('/signin', signinInfoValidator, login);
 
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    // eslint-disable-next-line no-useless-escape
-    avatar: Joi.string().pattern(/https?:\/\/w{0,3}[a-z0-9-._~:\/?#[\]@!$&'()*+,;=]{0,}/i),
-    email: Joi.string().required().email(),
-    password: Joi.string().required().pattern(/^[A-Za-z0-9]/i),
-  }),
-}), createUser);
+app.post('/signup', signupInfoValidator, createUser);
 
 app.use(auth);
 
