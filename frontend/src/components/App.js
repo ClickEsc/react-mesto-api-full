@@ -55,6 +55,10 @@ function App() {
     }
   }
 
+  React.useEffect(() => {
+    handleLogIn();
+  }, []);
+
   // Хук для попапа информирования об успешности регистрации
   const [infoTooltip, setInfoTooltip] = React.useState(undefined);
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
@@ -98,17 +102,21 @@ function App() {
     auth.authorize(email, password)
       .then((res) => {
         if (res.token) {
-          handleLogIn();
-          history.push('/');
+          /*handleLogIn();*/
+          localStorage.setItem('token', res.token);
+          setIsLoggedIn(true);
+          setUserEmail(userEmail);
         }
     })
     .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
   }
 
   // Cохранение токена для повторного входа пользователя без дополнительной авторизации
-  /*React.useEffect(() => {
-    handleLogIn();
-  }, [isLoggedIn]);*/
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      history.push('/');
+    }
+  }, [isLoggedIn]);
 
   // Удаление токена при выходе пользователя
   function signOut() {
@@ -125,12 +133,14 @@ function App() {
   }
 
   React.useEffect(() => {
-    api.getUserInfo()
-      .then((res) => {
-        handleCurrentUserInfo(res);
-      })
-      .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
-  }, [isLoggedIn]);
+    if (isLoggedIn) {
+      api.getUserInfo()
+        .then((res) => {
+          handleCurrentUserInfo(res);
+        })
+        .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
+    }
+  }, []);
 
   function handleUpdateUser(currentUser) {
     api.editUserInfo(currentUser)
@@ -200,12 +210,14 @@ function App() {
   }
   
   React.useEffect(() => {
+    if (isLoggedIn) {
       api.getInitialCards()
         .then((res) => {
           handleInitialCards(res);
         })
         .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
-  }, [isLoggedIn]);
+    }
+  }, []);
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {
