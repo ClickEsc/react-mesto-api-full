@@ -122,14 +122,12 @@ function App() {
   }
 
   React.useEffect(() => {
-    if (isLoggedIn) {
-      api.getUserInfo()
-        .then((res) => {
-          handleCurrentUserInfo(res);
-        })
-        .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
-    }
-  }, []);
+    api.getUserInfo()
+      .then((res) => {
+        handleCurrentUserInfo(res);
+      })
+      .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
+  }, [isLoggedIn]);
 
   function handleUpdateUser(currentUser) {
     api.editUserInfo(currentUser)
@@ -199,14 +197,12 @@ function App() {
   }
   
   React.useEffect(() => {
-    if (isLoggedIn) {
       api.getInitialCards()
         .then((res) => {
           handleInitialCards(res);
         })
         .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
-    }
-  }, []);
+  }, [isLoggedIn]);
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {

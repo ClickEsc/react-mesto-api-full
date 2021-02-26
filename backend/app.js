@@ -6,7 +6,7 @@ const cors = require('cors');
 const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { auth } = require('./middlewares/auth.js');
+const auth = require('./middlewares/auth.js');
 const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
@@ -17,29 +17,43 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 // CORS
-const allowedCors = [
-  'https://api.skubilina.students.nomoreparties.space',
-  'https://www.api.skubilina.students.nomoreparties.space',
-  'http://api.skubilina.students.nomoreparties.space',
-  'http://www.api.skubilina.students.nomoreparties.space',
-  'https://skubilina.students.nomoreparties.space',
-  'https://www.skubilina.students.nomoreparties.space',
-  'http://skubilina.students.nomoreparties.space',
-  'http://www.skubilina.students.nomoreparties.space',
-];
-
-const corsOptions = {
-  origin: allowedCors,
-  optionsSuccessStatus: 200,
+const options = {
+  origin: [
+    'http://localhost:8080',
+    'https://api.skubilina.students.nomoreparties.space',
+    'https://www.api.skubilina.students.nomoreparties.space',
+    'http://api.skubilina.students.nomoreparties.space',
+    'http://www.api.skubilina.students.nomoreparties.space',
+    'https://skubilina.students.nomoreparties.space',
+    'https://www.skubilina.students.nomoreparties.space',
+    'http://skubilina.students.nomoreparties.space',
+    'http://www.skubilina.students.nomoreparties.space',
+    'https://clickesc.github.io',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'X-Requested-With', 'Accept'],
+  credentials: true,
 };
 
-app.use('*', cors(corsOptions));
+app.use('*', cors(options));
 
+const allowedCors = [
+  'https://api.skubilina.students.nomoreparties.space/',
+  'https://www.api.skubilina.students.nomoreparties.space/',
+  'http://api.skubilina.students.nomoreparties.space/',
+  'http://www.api.skubilina.students.nomoreparties.space/',
+  'https://skubilina.students.nomoreparties.space/',
+  'https://www.skubilina.students.nomoreparties.space/',
+  'http://skubilina.students.nomoreparties.space/',
+  'http://www.skubilina.students.nomoreparties.space/',
+];
 app.use((req, res, next) => {
   const { origin } = req.headers;
-  if (allowedCors.indexOf(origin) > -1) {
-    res.set('Access-Control-Allow-Credentials', 'true');
-    res.set('Access-Control-Allow-Origin', origin);
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
   }
   next();
 });
