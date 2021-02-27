@@ -18,7 +18,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 // CORS
-const options = {
+/*const options = {
   origin: [
     'http://localhost:8080',
     'https://api.skubilina.students.nomoreparties.space',
@@ -38,9 +38,10 @@ const options = {
   credentials: true,
 };
 
-app.use('*', cors(options));
+app.use('*', cors(options));*/
+app.use('*', cors());
 
-const allowedCors = [
+/*const allowedCors = [
   'https://api.skubilina.students.nomoreparties.space/',
   'https://www.api.skubilina.students.nomoreparties.space/',
   'http://api.skubilina.students.nomoreparties.space/',
@@ -57,7 +58,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
   }
   next();
-});
+});*/
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
