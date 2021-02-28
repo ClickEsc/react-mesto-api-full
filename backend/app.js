@@ -11,6 +11,8 @@ const { signupInfoValidator } = require('./middlewares/validators/signup');
 const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
+const errorRouter = require('./routes/error.js');
+
 
 const { PORT = 3001 } = process.env;
 
@@ -77,6 +79,7 @@ app.post('/signup', signupInfoValidator, createUser);
 
 app.use('/', auth, cardsRouter);
 app.use('/', auth, usersRouter);
+app.use('/', errorRouter);
 
 // Логгирование ошибок
 app.use(errorLogger);

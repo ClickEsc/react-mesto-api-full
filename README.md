@@ -16,4 +16,6 @@ http://skubilina.students.nomoreparties.space
 Ссылка по защищенному соединению:
 https://skubilina.students.nomoreparties.space
 
+Бэкенд: https://api.skubilina.students.nomoreparties.space
+
 Публичный IP-адрес: 84.252.128.206

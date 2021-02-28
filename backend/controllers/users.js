@@ -5,6 +5,8 @@ const User = require('../models/user');
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
+const ConflictError = require('../errors/conflict-err');
+const UnauthorizedError = require('../errors/unauthorized-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -16,7 +18,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 // Запрос информации о пользователе по id
-/*module.exports.getUserById = (req, res, next) => {
+/* module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
@@ -34,7 +36,7 @@ module.exports.getUsers = (req, res, next) => {
         next(err);
       }
     });
-};*/
+}; */
 
 // Запрос информации о текущем пользователе
 module.exports.getCurrentUser = (req, res, next) => {
@@ -63,7 +65,15 @@ module.exports.createUser = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  bcrypt.hash(password, 10)
+  User.findOne({
+    email,
+  })
+    .then((data) => {
+      if (data) {
+        throw new ConflictError('Пользователь с таким email уже существует.');
+      }
+      return bcrypt.hash(password, 10);
+    })
     .then((hash) => User.create({
       name,
       about,
@@ -91,6 +101,9 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
+    .catch(() => {
+      throw new UnauthorizedError('Требуется авторизация');
+    })
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.send({ token });
