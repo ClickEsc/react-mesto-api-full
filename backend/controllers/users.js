@@ -38,20 +38,19 @@ module.exports.getUsers = (req, res, next) => {
 
 // Запрос информации о текущем пользователе
 module.exports.getCurrentUser = (req, res, next) => {
-  console.log(req.user._id);
   const userId = req.user._id;
 
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Нет пользователя uuu с таким id');
+        throw new NotFoundError('Нет пользователя с таким id');
       } else {
         res.status(200).send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Нет пользователя yyy с таким id');
+        throw new BadRequestError('Нет пользователя с таким id');
       } else {
         next(err);
       }

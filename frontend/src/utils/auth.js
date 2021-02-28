@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3001';
+export const BASE_URL = 'https://api.skubilina.students.nomoreparties.space';
 
 // Обработка запроса регистрации пользователя
 export const register = ({ email, password }) => {
@@ -56,7 +56,6 @@ export const getToken = (token) => {
   })
   .then(res => res.json())
   .then((data) => {
-    console.log(data);
     return data
   })
   .catch(err => console.log(err));

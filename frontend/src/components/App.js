@@ -42,18 +42,12 @@ function App() {
 
   function handleLogIn() {
     const token = localStorage.getItem('token');
-    console.log(token);
     if (token) {
       setIsLoggedIn(true);
-      console.log(isLoggedIn);
-      console.log(token);
       auth.getToken(token)
         .then((res) => {
-          console.log(res.token);
           if (res) {
-            console.log(res.data);
             setCurrentUser(res.data);
-            console.log(currentUser);
             setIsLoggedIn(true);
             setUserEmail(res.data.email);
             history.push('/');
@@ -71,7 +65,7 @@ function App() {
     setInfoTooltipOpen(true);
   }
   
-  function handleInfoTooltipContent(res) {
+  /*function handleInfoTooltipContent(res) {
     if (res) {
       setInfoTooltip({
         src: tickMark,
@@ -83,7 +77,7 @@ function App() {
         text: 'Что-то пошло не так! Попробуйте ещё раз.',
       });
     }
-  }
+  }*/
 
   // Регистрация пользователя
   function registerUser(data) {
@@ -91,11 +85,17 @@ function App() {
     auth.register(data)
       .then((res) => {
         if (res) {
-          handleInfoTooltipContent(res);
+          setInfoTooltip({
+            src: tickMark,
+            text: 'Вы успешно зарегистрировались!',
+          });
           handleInfoTooltip();
           history.push('/sign-in');
         } else {
-          handleInfoTooltipContent(res);
+          setInfoTooltip({
+            src: crossMark,
+            text: 'Что-то пошло не так! Попробуйте ещё раз.',
+          })
           handleInfoTooltip();
         }
     })
@@ -115,7 +115,8 @@ function App() {
           setIsLoggedIn(true);
           api.getInitialCards()
             .then((res) => {
-              handleInitialCards(res);
+              console.log(res);
+              setCards(res);
             })
             .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
           handleLogIn();
@@ -126,9 +127,12 @@ function App() {
   }
 
   // Cохранение токена для повторного входа пользователя без дополнительной авторизации
-  /*React.useEffect(() => {
-    handleLogIn();
-  }, [isLoggedIn]);*/
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      handleLogIn();
+    }
+  }, []);
 
   // Удаление токена при выходе пользователя
   function signOut() {
@@ -217,15 +221,13 @@ function App() {
     setCards(res);
   }
   
-  /*React.useEffect(() => {
-    if (isLoggedIn) {
-      api.getInitialCards()
-        .then((res) => {
-          handleInitialCards(res);
-        })
-        .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
-    }
-  }, [currentUser]);*/
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then((res) => {
+        handleInitialCards(res);
+      })
+      .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
+  }, [currentUser]);
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {
