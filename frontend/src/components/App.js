@@ -37,15 +37,23 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
 
-  console.log(isLoggedIn);
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
 
   function handleLogIn() {
     const token = localStorage.getItem('token');
+    console.log(token);
     if (token) {
+      setIsLoggedIn(true);
       console.log(isLoggedIn);
+      console.log(token);
       auth.getToken(token)
         .then((res) => {
+          console.log(res.token);
           if (res) {
+            console.log(res.data);
+            setCurrentUser(res.data);
+            console.log(currentUser);
             setIsLoggedIn(true);
             setUserEmail(res.data.email);
             history.push('/');
@@ -54,10 +62,6 @@ function App() {
         .catch(err => console.log(`Ошибка при запросе токена: ${err.message}`));
     }
   }
-
-  React.useEffect(() => {
-    handleLogIn();
-  }, []);
 
   // Хук для попапа информирования об успешности регистрации
   const [infoTooltip, setInfoTooltip] = React.useState(undefined);
@@ -82,8 +86,9 @@ function App() {
   }
 
   // Регистрация пользователя
-  function registerUser(email, password) {
-    auth.register(email, password)
+  function registerUser(data) {
+    console.log(data);
+    auth.register(data)
       .then((res) => {
         if (res) {
           handleInfoTooltipContent(res);
@@ -98,25 +103,32 @@ function App() {
   }
 
   // Авторизация пользователя
-  function authorizeUser(email, password) {
-    auth.authorize(email, password)
+  function authorizeUser(data) {
+    auth.authorize(data)
       .then((res) => {
         if (res.token) {
-          /*handleLogIn();*/
-          localStorage.setItem('token', res.token);
+          /*localStorage.setItem('token', res.token);
+          api.headers.authorization = `Bearer ${res.token}`;
+          /*console.log(localStorage);
+          setUserEmail(data.email);
+          api.headers.authorization = `Bearer ${res.token}`;*/
           setIsLoggedIn(true);
-          setUserEmail(userEmail);
+          api.getInitialCards()
+            .then((res) => {
+              handleInitialCards(res);
+            })
+            .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
+          handleLogIn();
+          history.push('/');
         }
-    })
-    .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
+      })
+      .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
   }
 
   // Cохранение токена для повторного входа пользователя без дополнительной авторизации
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      history.push('/');
-    }
-  }, [isLoggedIn]);
+  /*React.useEffect(() => {
+    handleLogIn();
+  }, [isLoggedIn]);*/
 
   // Удаление токена при выходе пользователя
   function signOut() {
@@ -125,22 +137,18 @@ function App() {
     history.push('/sign-in');
   }
 
-  // Хук для установки данных пользователя в профиле
-  const [currentUser, setCurrentUser] = React.useState({});
-
   function handleCurrentUserInfo(res) {
     setCurrentUser(res);
   }
 
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      api.getUserInfo()
-        .then((res) => {
-          handleCurrentUserInfo(res);
-        })
-        .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
-    }
-  }, []);
+  /*React.useEffect(() => {
+    api.getUserInfo()
+      .then((res) => {
+        console.log(res);
+        handleCurrentUserInfo(res);
+      })
+      .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
+  }, [isLoggedIn]);*/
 
   function handleUpdateUser(currentUser) {
     api.editUserInfo(currentUser)
@@ -203,13 +211,13 @@ function App() {
 
   // Карточки
 
-  const [cards, setCards] = React.useState([]);
+  
 
   function handleInitialCards(res) {
     setCards(res);
   }
   
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     if (isLoggedIn) {
       api.getInitialCards()
         .then((res) => {
@@ -217,7 +225,7 @@ function App() {
         })
         .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
     }
-  }, []);
+  }, [currentUser]);*/
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {
@@ -228,7 +236,7 @@ function App() {
       })
       .catch(err => console.log(`Ошибка при создании новой карточки: ${err}`))
   }
-
+  
   // Обработка лайка
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -252,8 +260,7 @@ function App() {
   }
 
   const renderedCards = cards.map((card) => {
-    return <Card key={card._id} card={card} onCardLike={handleCardLike} onCardDelete={handleCardDelete} onCardClick={handleCardClick} 
-    name={card.name} link={card.link} likes={card.likes.length} alt={`Изображение под названием ${card.name}`}/>
+    return <Card key={card._id} card={card} onCardLike={handleCardLike} onCardDelete={handleCardDelete} onCardClick={handleCardClick} />
   })
 
   return (

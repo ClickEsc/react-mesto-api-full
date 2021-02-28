@@ -73,13 +73,13 @@ class Api {
   // Поставить или убрать лайк
   changeLikeCardStatus(card, isLiked) {
     if (isLiked) {
-      return fetch(`${this.baseUrl}/cards/likes/${card._id}`, {
+      return fetch(`${this.baseUrl}/cards/${card._id}/likes`, {
         method: 'DELETE',
         headers: this.headers,
       })
         .then(res => this.showError(res))
     } else {
-      return fetch(`${this.baseUrl}/cards/likes/${card._id}`, {
+      return fetch(`${this.baseUrl}/cards/${card._id}/likes`, {
         method: 'PUT',
         headers: this.headers,
       })
@@ -89,7 +89,7 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: 'https://api.skubilina.students.nomoreparties.space',
+  baseUrl: 'http://localhost:3001',
   headers: {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${localStorage.getItem('token')}`

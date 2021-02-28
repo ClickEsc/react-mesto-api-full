@@ -11,35 +11,23 @@ const { signupInfoValidator } = require('./middlewares/validators/signup');
 const { login, createUser } = require('./controllers/users');
 const cardsRouter = require('./routes/cards.js');
 const usersRouter = require('./routes/users.js');
-const errorRouter = require('./routes/error.js');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
 
 // CORS
-/*const options = {
-  origin: [
-    'http://localhost:8080',
-    'https://api.skubilina.students.nomoreparties.space',
-    'https://www.api.skubilina.students.nomoreparties.space',
-    'http://api.skubilina.students.nomoreparties.space',
-    'http://www.api.skubilina.students.nomoreparties.space',
-    'https://skubilina.students.nomoreparties.space',
-    'https://www.skubilina.students.nomoreparties.space',
-    'http://skubilina.students.nomoreparties.space',
-    'http://www.skubilina.students.nomoreparties.space',
-    'https://clickesc.github.io',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+/*
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'X-Requested-With', 'Accept'],
-  credentials: true,
 };
+app.use(cors(corsOptions));*/
 
-app.use('*', cors(options));*/
-app.use('*', cors());
+
+app.use(cors());
 
 /*const allowedCors = [
   'https://api.skubilina.students.nomoreparties.space/',
@@ -62,6 +50,7 @@ app.use((req, res, next) => {
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
@@ -84,11 +73,10 @@ app.post('/signin', signinInfoValidator, login);
 
 app.post('/signup', signupInfoValidator, createUser);
 
-app.use(auth);
+/*app.use(auth);*/
 
-app.use('/', cardsRouter);
-app.use('/', usersRouter);
-app.use('/', errorRouter);
+app.use('/', auth, cardsRouter);
+app.use('/', auth, usersRouter);
 
 // Логгирование ошибок
 app.use(errorLogger);

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -15,7 +16,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 // Запрос информации о пользователе по id
-module.exports.getUserById = (req, res) => {
+/*module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
@@ -30,27 +31,27 @@ module.exports.getUserById = (req, res) => {
       if (err.name === 'CastError') {
         throw new BadRequestError('Нет пользователя с таким id');
       } else {
-        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+        next(err);
       }
     });
-};
+};*/
 
 // Запрос информации о текущем пользователе
 module.exports.getCurrentUser = (req, res, next) => {
+  console.log(req.user._id);
   const userId = req.user._id;
-  console.log(userId);
 
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
+        throw new NotFoundError('Нет пользователя uuu с таким id');
       } else {
         res.status(200).send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Нет пользователя с таким id');
+        throw new BadRequestError('Нет пользователя yyy с таким id');
       } else {
         next(err);
       }

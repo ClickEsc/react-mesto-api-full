@@ -1,7 +1,7 @@
-export const BASE_URL = 'https://api.skubilina.students.nomoreparties.space';
+export const BASE_URL = 'http://localhost:3001';
 
 // Обработка запроса регистрации пользователя
-export const register = (email, password) => {
+export const register = ({ email, password }) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
@@ -12,7 +12,7 @@ export const register = (email, password) => {
   })
     .then((res) => {
       try {
-        if (res.ok) {
+        if (res.status === 201) {
           return res.json();
         }
       } catch (err) {
@@ -26,21 +26,21 @@ export const register = (email, password) => {
 };
 
 // Обработка запроса авторизации пользователя
-export const authorize = (email, password) => {
+export const authorize = ({ email, password }) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({email, password})
+    body: JSON.stringify({ email, password })
   })
   .then((res => res.json()))
   .then((data) => {
-    /*if (data.token){
-      localStorage.setItem('token', data.token);*/
+    if (data.token) {
+      localStorage.setItem('token', data.token);
       return data;
-    /*}*/
+    }
   })
   .catch(err => console.log(err));
 };
@@ -55,6 +55,9 @@ export const getToken = (token) => {
     }
   })
   .then(res => res.json())
-  .then(data => data)
+  .then((data) => {
+    console.log(data);
+    return data
+  })
   .catch(err => console.log(err));
-}
+};

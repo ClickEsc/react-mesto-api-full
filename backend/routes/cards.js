@@ -13,7 +13,7 @@ router.post('/cards', celebrate({
     name: Joi.string().min(2).max(30),
     // eslint-disable-next-line no-useless-escape
     link: Joi.string().pattern(/https?:\/\/w{0,3}[a-z0-9-._~:\/?#[\]@!$&'()*+,;=]{0,}/i),
-  }),
+  }).unknown(true),
 }), createCard);
 
 // Запрос на удаление карточки

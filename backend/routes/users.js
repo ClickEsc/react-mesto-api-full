@@ -8,7 +8,7 @@ const {
 router.get('/users', getUsers);
 
 // Запрос информации о пользователе по id
-router.get('/users/:userId', getUserById);
+/*router.get('/users/:userId', getUserById);*/
 
 // Запрос информации о текущем пользователе
 router.get('/users/me', getCurrentUser);
