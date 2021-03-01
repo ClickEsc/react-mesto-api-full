@@ -7,11 +7,11 @@ const {
 // Запрос списка пользователей
 router.get('/users', getUsers);
 
-// Запрос информации о пользователе по id
-/*router.get('/users/:userId', getUserById);*/
-
 // Запрос информации о текущем пользователе
 router.get('/users/me', getCurrentUser);
+
+// Запрос информации о пользователе по id
+router.get('/users/:userId', getUserById);
 
 // Запрос на обновление информации в профиле
 router.patch('/users/me', celebrate({

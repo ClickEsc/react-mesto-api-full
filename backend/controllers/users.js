@@ -17,9 +17,9 @@ module.exports.getUsers = (req, res, next) => {
     .catch(next);
 };
 
-// Запрос информации о пользователе по id
-/* module.exports.getUserById = (req, res, next) => {
-  const { userId } = req.params;
+// Запрос информации о текущем пользователе
+module.exports.getCurrentUser = (req, res, next) => {
+  const userId = req.user._id;
 
   User.findById(userId)
     .then((user) => {
@@ -36,11 +36,11 @@ module.exports.getUsers = (req, res, next) => {
         next(err);
       }
     });
-}; */
+};
 
-// Запрос информации о текущем пользователе
-module.exports.getCurrentUser = (req, res, next) => {
-  const userId = req.user._id;
+// Запрос информации о пользователе по id
+module.exports.getUserById = (req, res, next) => {
+  const { userId } = req.params;
 
   User.findById(userId)
     .then((user) => {

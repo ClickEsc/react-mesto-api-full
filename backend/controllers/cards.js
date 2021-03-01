@@ -33,17 +33,15 @@ module.exports.deleteCard = (req, res, next) => {
       throw new NotFoundError('Нет карточки с таким id');
     })
     .then((data) => {
-      console.log(req.user._id);
-      console.log(data.owner);
-      if (req.user._id === data.owner) {
-        Card.findByIdAndRemove(req.params.cardId)
-          .then((card) => {
-            res.status(200).send(card);
+      if (req.user._id === data.owner.toString()) {
+        Card.findByIdAndRemove({ _id: data._id })
+          .then(() => {
+            res.status(200).send({ message: 'Карточка успешно удалена' });
           })
           .catch(next);
-      } /*else {
+      } else {
         throw new ForbiddenError('Вы не можете удалять карточки других пользователей');
-      }*/
+      }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -60,12 +58,11 @@ module.exports.likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .catch(() => {
+      throw new NotFoundError('Нет карточки с таким id');
+    })
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Нет карточки с таким id');
-      } else {
-        res.status(200).send({ data: card });
-      }
+      res.status(200).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -82,12 +79,11 @@ module.exports.dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
+    .catch(() => {
+      throw new NotFoundError('Нет карточки с таким id');
+    })
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Нет карточки с таким id');
-      } else {
-        res.status(200).send({ data: card });
-      }
+      res.status(200).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {

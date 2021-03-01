@@ -37,7 +37,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
 
-  const [currentUser, setCurrentUser] = React.useState({});
+  const [currentUser, setCurrentUser] = React.useState({ name: 'Жак-Ив Кусто', about: 'Исследователь' });
   const [cards, setCards] = React.useState([]);
 
   function handleLogIn() {
@@ -213,20 +213,17 @@ function App() {
   }
 
   // Карточки
-
-  
-
   function handleInitialCards(res) {
     setCards(res);
   }
   
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     api.getInitialCards()
       .then((res) => {
         handleInitialCards(res);
       })
       .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
-  }, [currentUser]);
+  }, [currentUser]);*/
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {
@@ -240,7 +237,8 @@ function App() {
   
   // Обработка лайка
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
+    console.log(isLiked);
         
     api.changeLikeCardStatus(card, isLiked)
       .then((newCard) => {

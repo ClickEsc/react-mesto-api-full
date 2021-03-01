@@ -7,7 +7,7 @@ function Card(props) {
 
   // Определяем, являемся ли мы владельцем текущей карточки, 
   // чтобы скрыть или показать иконку удаления карточки
-  /*const isOwn = props.card.owner === currentUserInfo._id;*/
+  const isOwn = props.card.owner === currentUserInfo._id;
 
   // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
   const isLiked = props.card.likes.some(i => i === currentUserInfo._id);
@@ -34,9 +34,9 @@ function Card(props) {
         <button className={cardLikeButtonClassName} onClick={handleLikeClick} type="button"></button>
         <p className="photo-gallery__like-counter">{`${props.card.likes.length}`}</p>
       </div>
-      
+      { isOwn ? 
         <button className="photo-gallery__remove-button" onClick={handleDeleteClick} type="button"></button>
-      
+      : ''}
     </li>
   );
 }
