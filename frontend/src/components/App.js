@@ -37,7 +37,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
 
-  const [currentUser, setCurrentUser] = React.useState({ name: 'Жак-Ив Кусто', about: 'Исследователь' });
+  const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
   function handleLogIn() {
@@ -162,8 +162,8 @@ function App() {
       .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
   }
 
-  function handleUpdateAvatar(currentUser) {
-    api.changeUserAvatar(currentUser)
+  function handleUpdateAvatar({ name, about }) {
+    api.changeUserAvatar({ name, about })
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -217,18 +217,19 @@ function App() {
     setCards(res);
   }
   
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     api.getInitialCards()
       .then((res) => {
         handleInitialCards(res);
       })
       .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
-  }, [currentUser]);*/
+  }, [currentUser]);
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {
     api.postCard(card)
       .then((newCard) => {
+        console.log(newCard);
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
