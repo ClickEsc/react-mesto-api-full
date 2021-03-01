@@ -65,7 +65,7 @@ function App() {
     setInfoTooltipOpen(true);
   }
   
-  /*function handleInfoTooltipContent(res) {
+  function handleInfoTooltipContent(res) {
     if (res) {
       setInfoTooltip({
         src: tickMark,
@@ -77,24 +77,18 @@ function App() {
         text: 'Что-то пошло не так! Попробуйте ещё раз.',
       });
     }
-  }*/
+  }
 
   // Регистрация пользователя
   function registerUser(data) {
     auth.register(data)
       .then((res) => {
         if (res) {
-          setInfoTooltip({
-            src: tickMark,
-            text: 'Вы успешно зарегистрировались!',
-          });
+          handleInfoTooltipContent(res.data);
           handleInfoTooltip();
           history.push('/sign-in');
         } else {
-          setInfoTooltip({
-            src: crossMark,
-            text: 'Что-то пошло не так! Попробуйте ещё раз.',
-          })
+          handleInfoTooltipContent(res.data);
           handleInfoTooltip();
         }
     })
@@ -106,11 +100,6 @@ function App() {
     auth.authorize(data)
       .then((res) => {
         if (res.token) {
-          /*localStorage.setItem('token', res.token);
-          api.headers.authorization = `Bearer ${res.token}`;
-          /*console.log(localStorage);
-          setUserEmail(data.email);
-          api.headers.authorization = `Bearer ${res.token}`;*/
           setIsLoggedIn(true);
           api.getInitialCards()
             .then((res) => {
@@ -144,28 +133,27 @@ function App() {
     setCurrentUser(res);
   }
 
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     api.getUserInfo()
       .then((res) => {
-        console.log(res);
-        handleCurrentUserInfo(res);
+        handleCurrentUserInfo(res.data);
       })
       .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
-  }, [isLoggedIn]);*/
+  }, [isLoggedIn]);
 
   function handleUpdateUser(currentUser) {
     api.editUserInfo(currentUser)
       .then((res) => {
-        setCurrentUser(res);
+        setCurrentUser(res.data);
         closeAllPopups();
       })
       .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
   }
 
-  function handleUpdateAvatar({ name, about }) {
-    api.changeUserAvatar({ name, about })
+  function handleUpdateAvatar({ avatar }) {
+    api.changeUserAvatar({ avatar })
       .then((res) => {
-        setCurrentUser(res);
+        setCurrentUser(res.data);
         closeAllPopups();
       })
       .catch(err => console.log(`Ошибка при замене аватара пользователя: ${err.message}`))
@@ -229,7 +217,6 @@ function App() {
   function handleAddPlaceSubmit(card) {
     api.postCard(card)
       .then((newCard) => {
-        console.log(newCard);
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
@@ -239,7 +226,6 @@ function App() {
   // Обработка лайка
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i === currentUser._id);
-    console.log(isLiked);
         
     api.changeLikeCardStatus(card, isLiked)
       .then((newCard) => {
