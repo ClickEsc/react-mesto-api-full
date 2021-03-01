@@ -80,15 +80,16 @@ function App() {
   }
 
   // Регистрация пользователя
-  function registerUser(data) {
-    auth.register(data)
+  function registerUser(email, password) {
+    auth.register(email, password)
       .then((res) => {
+        console.log(res);
         if (res) {
-          handleInfoTooltipContent(res.data);
+          handleInfoTooltipContent(res);
           handleInfoTooltip();
           history.push('/sign-in');
         } else {
-          handleInfoTooltipContent(res.data);
+          handleInfoTooltipContent(res);
           handleInfoTooltip();
         }
     })
@@ -96,8 +97,8 @@ function App() {
   }
 
   // Авторизация пользователя
-  function authorizeUser(data) {
-    auth.authorize(data)
+  function authorizeUser(email, password) {
+    auth.authorize(email, password)
       .then((res) => {
         if (res.token) {
           setIsLoggedIn(true);
@@ -211,7 +212,7 @@ function App() {
         handleInitialCards(res);
       })
       .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
-  }, [currentUser]);
+  }, [isLoggedIn]);
 
   // Добавление новой карточки
   function handleAddPlaceSubmit(card) {
@@ -247,7 +248,7 @@ function App() {
 
   const renderedCards = cards.map((card) => {
     return <Card key={card._id} card={card} onCardLike={handleCardLike} onCardDelete={handleCardDelete} onCardClick={handleCardClick} 
-    name={card.name} link={card.link} likes={card.likes.length} alt={`Изображение под названием ${card.name}`} />
+    alt={`Изображение под названием ${card.name}`} />
   })
 
   return (

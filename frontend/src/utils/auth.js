@@ -1,7 +1,7 @@
 export const BASE_URL = 'https://api.skubilina.students.nomoreparties.space';
 
 // Обработка запроса регистрации пользователя
-export const register = ({ email, password }) => {
+export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
@@ -12,7 +12,7 @@ export const register = ({ email, password }) => {
   })
     .then((res) => {
       try {
-        if (res.status === 201) {
+        if (res.ok) {
           return res.json();
         }
       } catch (err) {
@@ -26,14 +26,14 @@ export const register = ({ email, password }) => {
 };
 
 // Обработка запроса авторизации пользователя
-export const authorize = ({ email, password, name, about, avatar }, ...props) => {
+export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, password, name, about, avatar }, ...props)
+    body: JSON.stringify({ email, password })
   })
   .then((res => res.json()))
   .then((data) => {
