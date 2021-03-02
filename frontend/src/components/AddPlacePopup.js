@@ -31,11 +31,11 @@ function AddPlacePopup(props) {
   return (
     <PopupWithForm isOpen={props.isOpen} onSubmit={handleSubmit} onClose={props.onClose} name="add-card" title="Новое место" buttonTitle="Создать">
       <div className="popup__wrap">
-        <input required id="place-name-input" value={placeName} onChange={handlePlaceNameChange} className="popup__input popup__place-name" name="name" placeholder="Название" minLength="1" maxLength="30" />
+        <input required id="place-name-input" value={placeName || ''} onChange={handlePlaceNameChange} className="popup__input popup__place-name" name="name" placeholder="Название" minLength="1" maxLength="30" />
         <span id="place-name-input-error" className="popup__error-text popup__error-text_place-name"></span>
       </div>
       <div className="popup__wrap">
-        <input required id="place-link-input" value={placeLink} onChange={handlePlaceLinkChange} type="url" className="popup__input popup__place-link" name="link" placeholder="Ссылка на картинку" />
+        <input required id="place-link-input" value={placeLink || ''} onChange={handlePlaceLinkChange} type="url" className="popup__input popup__place-link" name="link" placeholder="Ссылка на картинку" />
         <span id="place-link-input-error" className="popup__error-text popup__error-text_place-link"></span>
       </div>
     </PopupWithForm>

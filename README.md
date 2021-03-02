@@ -10,11 +10,7 @@
 + Запросы валидируются
 + Происходит логирование запросов и ошибок
 
-Ссылка:  
-http://skubilina.students.nomoreparties.space
-
-Ссылка по защищенному соединению:
-https://skubilina.students.nomoreparties.space
+Ссылка: https://skubilina.students.nomoreparties.space
 
 Бэкенд: https://api.skubilina.students.nomoreparties.space
 

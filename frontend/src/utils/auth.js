@@ -1,5 +1,13 @@
 export const BASE_URL = 'https://api.skubilina.students.nomoreparties.space';
 
+const showError = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+
+  return Promise.reject(new Error(`Ошибка: ${res.status}`));
+}
+
 // Обработка запроса регистрации пользователя
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -22,7 +30,7 @@ export const register = (email, password) => {
     .then((res) => {
       return res;
     })
-    .catch((err) => console.log(err));
+    .then(res => showError(res));
 };
 
 // Обработка запроса авторизации пользователя
@@ -42,7 +50,7 @@ export const authorize = (email, password) => {
       return data;
     }
   })
-  .catch(err => console.log(err));
+  .then(res => showError(res));
 };
 
 // Обработка токена
@@ -58,5 +66,5 @@ export const getToken = (token) => {
   .then((data) => {
     return data
   })
-  .catch(err => console.log(err));
+  .then(res => showError(res));
 };

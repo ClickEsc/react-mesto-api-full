@@ -9,8 +9,8 @@ class Api {
     if (res.ok) {
       return res.json();
     }
-      console.log(res);
-      return Promise.reject(new Error(`Ошибка: ${res.status}`));
+
+    return Promise.reject(new Error(`Ошибка: ${res.status}`));
   }
 
   // Получить список всех карточек в виде массива

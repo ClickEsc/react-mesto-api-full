@@ -11,7 +11,11 @@ router.get('/users', getUsers);
 router.get('/users/me', getCurrentUser);
 
 // Запрос информации о пользователе по id
-router.get('/users/:userId', getUserById);
+router.get('/users/:userId', celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().length(24).hex(),
+  }),
+}), getUserById);
 
 // Запрос на обновление информации в профиле
 router.patch('/users/me', celebrate({

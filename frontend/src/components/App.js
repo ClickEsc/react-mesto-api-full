@@ -37,7 +37,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
 
-  const [currentUser, setCurrentUser] = React.useState({});
+  const [currentUser, setCurrentUser] = React.useState({ name: '', about: '', avatar: '' });
   const [cards, setCards] = React.useState([]);
 
   function handleLogIn() {
