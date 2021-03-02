@@ -18,19 +18,10 @@ export const register = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
-    .then((res) => {
-      try {
-        if (res.ok) {
-          return res.json();
-        }
-      } catch (err) {
-        return (err)
-      }
-    })
+    .then(res => showError(res))
     .then((res) => {
       return res;
     })
-    .then(res => showError(res));
 };
 
 // Обработка запроса авторизации пользователя
@@ -43,14 +34,13 @@ export const authorize = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
-  .then((res => res.json()))
+  .then(res => showError(res))
   .then((data) => {
     if (data.token) {
       localStorage.setItem('token', data.token);
       return data;
     }
   })
-  .then(res => showError(res));
 };
 
 // Обработка токена
@@ -62,9 +52,8 @@ export const getToken = (token) => {
       'Authorization': `Bearer ${token}`
     }
   })
-  .then(res => res.json())
+  .then(res => showError(res))
   .then((data) => {
     return data
   })
-  .then(res => showError(res));
 };
