@@ -83,7 +83,6 @@ function App() {
   function registerUser(email, password) {
     auth.register(email, password)
       .then((res) => {
-        console.log(res);
         if (res) {
           handleInfoTooltipContent(res);
           handleInfoTooltip();
@@ -102,12 +101,6 @@ function App() {
       .then((res) => {
         if (res.token) {
           setIsLoggedIn(true);
-          api.getInitialCards()
-            .then((res) => {
-              console.log(res);
-              setCards(res);
-            })
-            .catch(err => console.log(`Ошибка при запросе начальных карточек: ${err}`))
           handleLogIn();
           history.push('/');
         }
