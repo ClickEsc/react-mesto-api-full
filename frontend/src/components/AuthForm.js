@@ -1,6 +1,6 @@
 function AuthForm(props) {
   return (
-    <div className="auth">
+    <div className="auth" style={(props.name === "signup") ? {paddingBottom: "50px"} : {paddingBottom: "80px"}}>
       <form noValidate onSubmit={props.onSubmit} className={`auth__form auth__form_${props.name}`} name={`${props.name}-form`}>
         <h2 className="auth__title">{`${props.title}`}</h2>
         <input required value={props.email} onChange={props.handleEmailChange} id="auth-email-input" type="email" className="auth__input auth__input_email" placeholder="Email"></input>

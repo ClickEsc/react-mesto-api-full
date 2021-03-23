@@ -33,6 +33,8 @@ function App() {
 
   const history = useHistory();
 
+  const pathname = window.location.pathname;
+
   // Хук состояния авторизован пользователь или нет
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
@@ -271,7 +273,7 @@ function App() {
                 {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
               </Route>
             </Switch>
-            <Footer />
+            <Footer style={(pathname === "signin" || pathname === "signup") ? {display: "none"} : {display: "block"}}/>
             <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} />
             <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser} onClose={closeAllPopups} /> 
             <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
